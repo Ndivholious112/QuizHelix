@@ -3,86 +3,64 @@ import java.util.*;
 public class Quiz {
 
     public static void startQuiz() {
-        List<Question> questions = createQuestions();
-        Collections.shuffle(questions);
-        Scanner scanner = new Scanner(System.in);
-        int score = 0;
+        try {
+            List<Question> questions = CreateQuestions.createQuestions();
+            Collections.shuffle(questions);
+            Scanner scanner = new Scanner(System.in);
+            int score = 0;
 
-        for (int i = 0; i < 10; i++) {
-            Question q = questions.get(i);
-            String[] shuffledOptions = q.getOption().clone();
-            List<String> shuffledList = Arrays.asList(shuffledOptions);
-            Collections.shuffle(shuffledList);
-            shuffledOptions = shuffledList.toArray(new String[0]);
+            for (int i = 0; i < 10; i++) {
+                Question q = questions.get(i);
+                String[] shuffledOptions = q.getOption().clone();
+                List<String> shuffledList = Arrays.asList(shuffledOptions);
+                Collections.shuffle(shuffledList);
+                shuffledOptions = shuffledList.toArray(new String[0]);
 
-            System.out.println("\nQuestion " + (i + 1) + ": " + q.getQuestion());
-            char[] labels = {'A', 'B', 'C', 'D'};
-            Map<Character, String> optionMap = new HashMap<>();
+                System.out.println("\nQuestion " + (i + 1) + ": " + q.getQuestion());
+                char[] labels = {'A', 'B', 'C', 'D'};
+                Map<Character, String> optionMap = new HashMap<>();
 
-            for (int j = 0; j < shuffledOptions.length; j++) {
-                System.out.println(labels[j] + ": " + shuffledOptions[j]);
-                optionMap.put(labels[j], shuffledOptions[j]);
+                for (int j = 0; j < shuffledOptions.length; j++) {
+                    System.out.println(labels[j] + ": " + shuffledOptions[j]);
+                    optionMap.put(labels[j], shuffledOptions[j]);
+                }
+
+                System.out.print("Your answer: ");
+                char userAnswer;
+
+                try {
+                    userAnswer = scanner.nextLine().toUpperCase().charAt(0);
+
+                    if (!optionMap.containsKey(userAnswer)) {
+                        System.out.println("Invalid choice. Skipping question.");
+                        continue;
+                    }
+
+                    String correctAnswerText = q.getOption()[q.getCorrectAnswer() - 'A'];
+                    if (optionMap.get(userAnswer).equals(correctAnswerText)) {
+                        score++;
+                    }
+
+                } catch (Exception e) {
+                    System.out.println("Invalid input. Skipping this question.");
+                }
             }
 
-            System.out.print("Your answer: ");
-            char userAnswer = scanner.next().toUpperCase().charAt(0);
+            int percentage = (score * 100) / 10;
+            System.out.println("\nYou scored " + score + "/10 (" + percentage + "%)");
 
-            String correctAnswerText = q.getOption()[q.getCorrectAnswer() - 'A'];
-
-            if (optionMap.containsKey(userAnswer) &&
-                    optionMap.get(userAnswer).equals(correctAnswerText)) {
-                score++;
+            if (percentage < 40) {
+                System.out.println("Result: Failed");
+            } else if (percentage < 50) {
+                System.out.println("Result: Supplementary");
+            } else if (percentage < 80) {
+                System.out.println("Result: Passed");
+            } else {
+                System.out.println("Result: Distinction");
             }
+
+        } catch (Exception e) {
+            System.out.println("An error occurred while running the quiz. Please restart.");
         }
-
-        int percentage = (score * 100) / 10;
-        System.out.println("\nYou scored " + score + "/10 (" + percentage + "%)");
-
-        if (percentage < 40) {
-            System.out.println("Result: Failed");
-        } else if (percentage < 50) {
-            System.out.println("Result: Supplementary");
-        } else if (percentage < 80) {
-            System.out.println("Result: Passed");
-        } else {
-            System.out.println("Result: Distinction");
-        }
-    }
-
-    public static List<Question> createQuestions() {
-        List<Question> list = new ArrayList<>();
-
-        list.add(new Question("What is the capital of South Africa?", 'A',
-                new String[]{"Pretoria", "Cape Town", "Johannesburg", "Durban"}));
-        list.add(new Question("Which language is most spoken in South Africa?", 'B',
-                new String[]{"Zulu", "Xhosa", "Afrikaans", "English"}));
-        list.add(new Question("What year did South Africa become a democracy?", 'C',
-                new String[]{"1990", "1992", "1994", "1996"}));
-        list.add(new Question("Who was South Africa’s first black president?", 'A',
-                new String[]{"Nelson Mandela", "Jacob Zuma", "Cyril Ramaphosa", "Thabo Mbeki"}));
-        list.add(new Question("What is the national currency of South Africa?", 'B',
-                new String[]{"Dollar", "Rand", "Euro", "Pound"}));
-        list.add(new Question("Which ocean lies on South Africa’s west coast?", 'C',
-                new String[]{"Indian Ocean", "Southern Ocean", "Atlantic Ocean", "Arctic Ocean"}));
-        list.add(new Question("What is the name of the mountain overlooking Cape Town?", 'D',
-                new String[]{"Drakensberg", "Lion's Head", "Devil’s Peak", "Table Mountain"}));
-        list.add(new Question("Which province is Johannesburg in?", 'A',
-                new String[]{"Gauteng", "Limpopo", "KwaZulu-Natal", "Mpumalanga"}));
-        list.add(new Question("Which famous prison held Nelson Mandela?", 'C',
-                new String[]{"Alcatraz", "Sun City", "Robben Island", "Pollsmoor"}));
-        list.add(new Question("What sport is South Africa famous for?", 'D',
-                new String[]{"Tennis", "Hockey", "Basketball", "Rugby"}));
-        list.add(new Question("What is South Africa’s nickname?", 'A',
-                new String[]{"Rainbow Nation", "Motherland", "Sunshine Land", "Southern Star"}));
-        list.add(new Question("Which desert is partly in South Africa?", 'B',
-                new String[]{"Sahara", "Kalahari", "Namib", "Atacama"}));
-        list.add(new Question("What is the biggest dam in South Africa?", 'C',
-                new String[]{"Sterkfontein", "Gariep", "Vaal", "Theewaterskloof"}));
-        list.add(new Question("Which animal is NOT part of the Big Five?", 'D',
-                new String[]{"Lion", "Elephant", "Rhino", "Giraffe"}));
-        list.add(new Question("Which South African city is a legislative capital?", 'B',
-                new String[]{"Bloemfontein", "Cape Town", "Pretoria", "Durban"}));
-
-        return list;
     }
 }
