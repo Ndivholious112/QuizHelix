@@ -8,22 +8,23 @@ public class Welcome {
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
         Scanner input = new Scanner(System.in);
-        System.out.println("\nWhat's your name?: ");
-        String name = input.nextLine();
 
-        System.out.println("\nWhat's your age?: ");
-        int age = input.nextInt();
+        try {
+            System.out.print("\nWhat's your name?: ");
+            String name = input.nextLine();
 
-        System.out.println("\nAre you ready for your Quiz?:(Y/N) ");
-        char answer = input.next().toUpperCase().charAt(0);
+            System.out.print("What's your age?: ");
+            int age = Integer.parseInt(input.nextLine());
 
-        if (answer == 'Y') {
-            System.out.println("\nAwesome " + name + " let the quiz begin");
-        }
-        else if (answer == 'N') {
-            System.out.println("\nNo problem " + name + ". Come back when you are ready");
-        } else {
-            System.out.println("\nInvalid input. Please restart the program and enter Y or N.");
+            System.out.println("\nAwesome " + name + ", let the quiz begin!\n");
+            Quiz.startQuiz();
+
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input for age. Please enter a number.");
+            return;
+        } catch (Exception e) {
+            System.out.println("Something went wrong. Please try again.");
+            return;
         }
     }
 }
