@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class Welcome {
-    public static void main(String[] args) {
+    public static void welcomeMessage() {
         System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println("Welcome to QuizHelix");
         System.out.println("Twisting Questions, Sharpening Minds.");
